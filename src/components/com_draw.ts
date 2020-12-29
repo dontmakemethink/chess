@@ -1,12 +1,13 @@
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
-export type Draw = DrawText | DrawRect | DrawSelection;
+export type Draw = DrawText | DrawRect | DrawSelection | DrawChessBoard;
 
 export const enum DrawKind {
     Text,
     Rect,
     Selection,
+    ChessBoard,
 }
 
 export interface DrawText {
@@ -58,6 +59,19 @@ export function draw_selection(color: string) {
         game.World.Draw[entity] = {
             Kind: DrawKind.Selection,
             Color: color,
+        };
+    };
+}
+
+export interface DrawChessBoard {
+    Kind: DrawKind.ChessBoard;
+}
+
+export function draw_chess_board() {
+    return (game: Game, entity: Entity) => {
+        game.World.Signature[entity] |= Has.Draw;
+        game.World.Draw[entity] = {
+            Kind: DrawKind.ChessBoard,
         };
     };
 }
