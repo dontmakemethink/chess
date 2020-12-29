@@ -52,7 +52,6 @@ export class Game {
             this.InputDelta.WheelY = evt.deltaY;
         });
         this.Ui.addEventListener("contextmenu", (evt) => evt.preventDefault());
-        this.Ui.addEventListener("click", () => this.Ui.requestPointerLock());
 
         let canvas2d = document.querySelector("canvas")!;
         this.Context2D = canvas2d.getContext("2d")!;
