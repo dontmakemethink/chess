@@ -9,8 +9,9 @@ export type Entity = number;
 export class Game {
     World = new World();
 
-    ViewportWidth = window.innerWidth;
-    ViewportHeight = window.innerHeight;
+    DevicePixelRatio = window.devicePixelRatio;
+    ViewportWidth = window.innerWidth * this.DevicePixelRatio;
+    ViewportHeight = window.innerHeight * this.DevicePixelRatio;
 
     InputState: Record<string, number> = {};
     InputDelta: Record<string, number> = {};
@@ -54,9 +55,13 @@ export class Game {
         this.Ui.addEventListener("click", () => this.Ui.requestPointerLock());
 
         let canvas2d = document.querySelector("canvas")!;
-        canvas2d.width = this.ViewportWidth;
-        canvas2d.height = this.ViewportHeight;
         this.Context2D = canvas2d.getContext("2d")!;
+
+        canvas2d.style.width = this.ViewportWidth + "px";
+        canvas2d.style.height = this.ViewportHeight + "px";
+        canvas2d.width = Math.floor(this.ViewportWidth * this.DevicePixelRatio);
+        canvas2d.height = Math.floor(this.ViewportHeight * this.DevicePixelRatio);
+        this.Context2D.scale(this.DevicePixelRatio, this.DevicePixelRatio);
     }
 
     FrameReset() {
