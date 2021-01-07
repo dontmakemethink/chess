@@ -1,3 +1,4 @@
+import {Piece} from "./components/com_draw.js";
 import {loop_start, loop_stop} from "./loop.js";
 import {sys_draw2d} from "./systems/sys_draw2d.js";
 import {sys_framerate} from "./systems/sys_framerate.js";
@@ -15,10 +16,10 @@ export class Game {
 
     BoardSize = Math.min(this.ViewportHeight, this.ViewportWidth) * 0.8;
     SquareSize = this.BoardSize / 8;
-    ChessBoard = [
+    ChessBoard: Piece[][] = [
+        [0, Piece.Pawn, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, Piece.Pawn, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],

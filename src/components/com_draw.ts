@@ -2,13 +2,14 @@ import {Vec2} from "../../common/math.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
-export type Draw = DrawText | DrawRect | DrawSelection | DrawChessSquare;
+export type Draw = DrawText | DrawRect | DrawSelection | DrawChessSquare | DrawPiece;
 
 export const enum DrawKind {
     Text,
     Rect,
     Selection,
     ChessSquare,
+    Piece,
 }
 
 export interface DrawText {
@@ -74,6 +75,28 @@ export function draw_chess_square(coords: Vec2) {
         game.World.Signature[entity] |= Has.Draw;
         game.World.Draw[entity] = {
             Kind: DrawKind.ChessSquare,
+            Coords: coords,
+        };
+    };
+}
+
+export interface DrawPiece {
+    Kind: DrawKind.Piece;
+    Coords: Vec2;
+    Piece: Piece;
+}
+
+export const enum Piece {
+    None,
+    Pawn,
+}
+
+export function draw_piece(coords: Vec2, piece: Piece) {
+    return (game: Game, entity: Entity) => {
+        game.World.Signature[entity] |= Has.Draw;
+        game.World.Draw[entity] = {
+            Kind: DrawKind.Piece,
+            Piece: piece,
             Coords: coords,
         };
     };

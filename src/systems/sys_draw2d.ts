@@ -1,4 +1,4 @@
-import {DrawChessSquare, DrawKind, DrawRect} from "../components/com_draw.js";
+import {DrawChessSquare, DrawKind, DrawPiece, DrawRect} from "../components/com_draw.js";
 import {Game} from "../game.js";
 import {Has} from "../world.js";
 
@@ -29,6 +29,9 @@ export function sys_draw2d(game: Game, delta: number) {
                 case DrawKind.ChessSquare:
                     draw_chess_square(game, draw);
                     break;
+                case DrawKind.Piece:
+                    draw_piece(game, draw);
+                    break;
             }
         }
     }
@@ -48,5 +51,17 @@ function draw_chess_square(game: Game, draw: DrawChessSquare) {
         game.SquareSize * x + game.ViewportHeight / 2 - game.BoardSize / 2,
         game.SquareSize,
         game.SquareSize
+    );
+}
+
+function draw_piece(game: Game, draw: DrawPiece) {
+    const [x, y] = draw.Coords;
+
+    game.Context2D.fillStyle = "black";
+    game.Context2D.fillRect(
+        y * game.SquareSize + game.SquareSize * 0.3 + game.ViewportWidth / 2 - game.BoardSize / 2,
+        x * game.SquareSize + game.SquareSize * 0.3 + game.ViewportHeight / 2 - game.BoardSize / 2,
+        game.SquareSize * 0.4,
+        game.SquareSize * 0.4
     );
 }
