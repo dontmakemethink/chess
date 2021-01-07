@@ -1,5 +1,4 @@
 import {loop_start, loop_stop} from "./loop.js";
-import {sys_chess_square} from "./systems/sys_chess_square.js";
 import {sys_draw2d} from "./systems/sys_draw2d.js";
 import {sys_framerate} from "./systems/sys_framerate.js";
 import {sys_transform2d} from "./systems/sys_transform2d.js";
@@ -87,7 +86,6 @@ export class Game {
         let now = performance.now();
         sys_transform2d(this, delta);
         sys_draw2d(this, delta);
-        sys_chess_square(this, delta);
         sys_framerate(this, delta, performance.now() - now);
     }
 }
