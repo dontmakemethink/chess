@@ -45,7 +45,9 @@ function draw_rect(game: Game, draw: DrawRect) {
 function draw_chess_square(game: Game, draw: DrawChessSquare) {
     const [x, y] = draw.Coords;
 
-    game.Context2D.fillStyle = (x + y) % 2 === 0 ? "white" : "gray";
+    const active = game.PieceToMove && game.PieceToMove[0] === x && game.PieceToMove[1] === y;
+
+    game.Context2D.fillStyle = active ? "yellow" : (x + y) % 2 === 0 ? "white" : "gray";
     game.Context2D.fillRect(
         game.SquareSize * y + game.ViewportWidth / 2 - game.BoardSize / 2,
         game.SquareSize * x + game.ViewportHeight / 2 - game.BoardSize / 2,
@@ -56,12 +58,13 @@ function draw_chess_square(game: Game, draw: DrawChessSquare) {
 
 function draw_piece(game: Game, draw: DrawPiece) {
     const [x, y] = draw.Coords;
+    const piece = draw.Piece;
 
-    game.Context2D.fillStyle = "black";
-    game.Context2D.fillRect(
-        y * game.SquareSize + game.SquareSize * 0.3 + game.ViewportWidth / 2 - game.BoardSize / 2,
-        x * game.SquareSize + game.SquareSize * 0.3 + game.ViewportHeight / 2 - game.BoardSize / 2,
-        game.SquareSize * 0.4,
-        game.SquareSize * 0.4
+    game.Context2D.drawImage(
+        game.Images[piece.toString()],
+        y * game.SquareSize + game.ViewportWidth / 2 - game.BoardSize / 2,
+        x * game.SquareSize + game.ViewportHeight / 2 - game.BoardSize / 2,
+        game.SquareSize,
+        game.SquareSize
     );
 }

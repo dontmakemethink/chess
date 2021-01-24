@@ -1,3 +1,4 @@
+import {Vec2} from "../common/math.js";
 import {Piece} from "./components/com_draw.js";
 import {loop_start, loop_stop} from "./loop.js";
 import {sys_draw2d} from "./systems/sys_draw2d.js";
@@ -16,16 +17,21 @@ export class Game {
 
     BoardSize = Math.min(this.ViewportHeight, this.ViewportWidth) * 0.8;
     SquareSize = this.BoardSize / 8;
-    ChessBoard: Piece[][] = [
-        [0, Piece.Pawn, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, Piece.Pawn, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
+
+    Images: Record<string, HTMLImageElement> = {};
+
+    ChessBoard: (Piece | null)[][] = [
+        [null, Piece.WPawn, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, Piece.BPawn, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
     ];
+
+    PieceToMove: Vec2 | null = null;
 
     InputState: Record<string, number> = {};
     InputDelta: Record<string, number> = {};
@@ -85,6 +91,37 @@ export class Game {
 
     FrameUpdate(delta: number) {
         let now = performance.now();
+
+        if (this.InputState.Escape && this.PieceToMove) {
+            this.PieceToMove = null;
+        }
+
+        if (this.InputState.Mouse0 && !this.PieceToMove) {
+            let y: number | null = Math.floor(
+                (this.InputState.MouseX -
+                    (this.ViewportWidth - this.BoardSize) / 2 / this.DevicePixelRatio) /
+                    (this.SquareSize / this.DevicePixelRatio)
+            );
+
+            let x: number | null = Math.floor(
+                (this.InputState.MouseY -
+                    (this.ViewportHeight - this.BoardSize) / 2 / this.DevicePixelRatio) /
+                    (this.SquareSize / this.DevicePixelRatio)
+            );
+
+            if (
+                !(
+                    x > this.ChessBoard.length - 1 ||
+                    x < 0 ||
+                    y > this.ChessBoard[0].length - 1 ||
+                    y < 0
+                ) &&
+                this.ChessBoard[x][y]
+            ) {
+                this.PieceToMove = [x, y];
+            }
+        }
+
         sys_transform2d(this, delta);
         sys_draw2d(this, delta);
         sys_framerate(this, delta, performance.now() - now);

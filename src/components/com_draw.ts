@@ -87,8 +87,8 @@ export interface DrawPiece {
 }
 
 export const enum Piece {
-    None,
-    Pawn,
+    WPawn = 1,
+    BPawn,
 }
 
 export function draw_piece(coords: Vec2, piece: Piece) {
